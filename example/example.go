@@ -1,11 +1,3 @@
-# gron: Yet another crontab-alike utility
-
-Gron is an elegant and simple periodic Golang task scheduler, built for human beings.
-And, yes, it is `parallel`.
-
-## Example
-
-```go
 package main
 
 import (
@@ -37,9 +29,3 @@ func main() {
 		}
 	}
 }
-
-```
-
-## License
-
-MIT
