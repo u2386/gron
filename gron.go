@@ -46,9 +46,7 @@ func Remove(name TaskName) error {
 	}
 
 	if len(c.tasks) == 0 {
-		go func() {
-			bus <- Event{"", Empty, ""}
-		}()
+		go publishEmptyEvent()
 	}
 	return nil
 }
@@ -69,15 +67,15 @@ func Enable(name TaskName) {
 
 // Notice: Block-call
 func enableTask(task *Task) {
-	bus <- Event{task.Name, Enabled, ""}
+	publishEnabledEvent(*task)
 	task.run()
 }
 
 // Notice: Block-call
 func disableTask(task *Task) {
+	publishDisabledEvent(*task)
 	task.c <- struct{}{}
 	<-task.c
-	bus <- Event{task.Name, Disabled, ""}
 }
 
 func init() {

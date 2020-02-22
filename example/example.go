@@ -26,20 +26,33 @@ func main() {
 		Name("Blizzard!"),
 	)
 
+	Gron(
+		Every(4),
+		Seconds(),
+		Do(func() {
+			panic("Oops...")
+		}),
+		Name("Thunderclap!"),
+	)
+
 	start := time.Now()
 	// subscribe task events
+LOOP:
 	for ev := range Subscribe() {
-		if ev.E == Empty {
-			break
+		if time.Since(start) > 10*time.Second {
+			Disable(ev.TaskName)
+		}
 
-		} else if ev.E == Disabled {
+		switch ev.E {
+		case Empty:
+			break LOOP
+		case Disabled:
 			fmt.Println("Disabled:", ev.TaskName)
 			Remove(ev.TaskName)
-
-		} else if time.Since(start) > 10*time.Second {
+		case Failed:
+			fmt.Println("Failed:", ev.TaskName, ev.Msg)
 			Disable(ev.TaskName)
-
-		} else {
+		default:
 			fmt.Println(ev.TaskName, ev.E)
 		}
 	}

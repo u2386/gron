@@ -34,6 +34,7 @@ type Task struct {
 	fn       interface{}
 	c        chan struct{}
 	status   status
+	errMsg   string
 }
 
 func newTask() Task {
@@ -69,13 +70,14 @@ func (t *Task) run() {
 func stepRun(t *Task) {
 	defer func() {
 		if r := recover(); r != nil {
-			bus <- Event{t.Name, Failed, fmt.Sprintf("%v", r)}
+			t.errMsg = fmt.Sprintf("%v", r)
+			publishFailedEvent(*t)
 			return
 		}
-		bus <- Event{t.Name, Finished, ""}
+		publishFinishedEvent(*t)
 	}()
 
-	bus <- Event{t.Name, Running, ""}
+	publishRunningEvent(*t)
 	v := reflect.ValueOf(t.fn)
 	v.Call([]reflect.Value{})
 }

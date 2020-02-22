@@ -3,20 +3,19 @@ package gron
 // bus is a global internal event stream
 var bus chan Event
 
-// Subscribe returns the crond event channel
-func Subscribe() <-chan Event {
-	for name := range c.tasks {
-		Enable(name)
-	}
-	return bus
-}
-
 // EventType indicates the type of event
-type EventType int
+type eventType int
+
+// Event presents the task event
+type Event struct {
+	TaskName
+	E   eventType
+	Msg string
+}
 
 const (
 	// Enabled emitted when a task is enabled
-	Enabled EventType = iota
+	Enabled eventType = iota
 
 	// Disabled emitted when a task has been disabled
 	Disabled
@@ -34,7 +33,15 @@ const (
 	Empty
 )
 
-func (et EventType) String() string {
+// Subscribe returns the gron event channel
+func Subscribe() <-chan Event {
+	for name := range c.tasks {
+		Enable(name)
+	}
+	return bus
+}
+
+func (et eventType) String() string {
 	switch et {
 	case Enabled:
 		return "Enabled"
@@ -49,15 +56,32 @@ func (et EventType) String() string {
 	case Empty:
 		return "Empty"
 	default:
+		return "Undefined"
 	}
-	return "Undefined"
 }
 
-// Event presents the task event
-type Event struct {
-	TaskName
-	E   EventType
-	Msg string
+func publishEnabledEvent(task Task) {
+	bus <- Event{task.Name, Enabled, ""}
+}
+
+func publishDisabledEvent(task Task) {
+	bus <- Event{task.Name, Disabled, ""}
+}
+
+func publishRunningEvent(task Task) {
+	bus <- Event{task.Name, Running, ""}
+}
+
+func publishFinishedEvent(task Task) {
+	bus <- Event{task.Name, Finished, ""}
+}
+
+func publishFailedEvent(task Task) {
+	bus <- Event{task.Name, Failed, task.errMsg}
+}
+
+func publishEmptyEvent() {
+	bus <- Event{"", Empty, ""}
 }
 
 func init() {
