@@ -44,6 +44,12 @@ func Remove(name TaskName) error {
 		}
 		delete(c.tasks, name)
 	}
+
+	if len(c.tasks) == 0 {
+		go func() {
+			bus <- Event{"", Empty, ""}
+		}()
+	}
 	return nil
 }
 

@@ -29,6 +29,9 @@ const (
 
 	// Failed emitted when a task has failed
 	Failed
+
+	// Empty emitted when no task in crond
+	Empty
 )
 
 // Event presents the task event

@@ -29,7 +29,10 @@ func main() {
 	start := time.Now()
 	// subscribe task events
 	for ev := range Subscribe() {
-		if ev.E == Disabled {
+		if ev.E == Empty {
+			break
+
+		} else if ev.E == Disabled {
 			fmt.Println("Disabled:", ev.TaskName)
 			Remove(ev.TaskName)
 
