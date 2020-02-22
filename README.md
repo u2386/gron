@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	Crontab(
+	Gron(
 		Every(2),
 		Seconds(),
 		Do(func() {

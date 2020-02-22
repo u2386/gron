@@ -5,6 +5,9 @@ var bus chan Event
 
 // Subscribe returns the crond event channel
 func Subscribe() <-chan Event {
+	for name := range c.tasks {
+		Enable(name)
+	}
 	return bus
 }
 

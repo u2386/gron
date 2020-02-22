@@ -4,23 +4,22 @@ import (
 	"fmt"
 )
 
-// c is a global internal Gron instance
-var c Gron
+// c is a global internal gron instance
+var c gron
 
-// Gron is an implementation of the task scheduler
-type Gron struct {
+type gron struct {
 	tasks map[TaskName]*Task
 }
 
 // newGron is an internal call for testing purposes
-func newGron() Gron {
-	return Gron{
+func newGron() gron {
+	return gron{
 		tasks: make(map[TaskName]*Task),
 	}
 }
 
-// Crontab is an user interface for declaring periodic task
-func Crontab(ops ...Option) error {
+// Gron is an user interface for declaring periodic task
+func Gron(ops ...Option) error {
 	task := newTask()
 	var err error
 	for _, op := range ops {
@@ -34,8 +33,6 @@ func Crontab(ops ...Option) error {
 		return fmt.Errorf("Duplicated task: %s", name)
 	}
 	c.tasks[name] = &task
-
-	enableTask(&task)
 	return nil
 }
 
@@ -64,11 +61,13 @@ func Enable(name TaskName) {
 	}
 }
 
+// Notice: Block-call
 func enableTask(task *Task) {
 	bus <- Event{task.Name, Enabled, ""}
 	task.run()
 }
 
+// Notice: Block-call
 func disableTask(task *Task) {
 	task.c <- struct{}{}
 	<-task.c

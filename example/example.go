@@ -2,30 +2,39 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	. "github.com/u2386/gron"
 )
 
 func main() {
-	Crontab(
+	Gron(
 		Every(2),
 		Seconds(),
 		Do(func() {
-			fmt.Println("2 seconds elapsed...")
+			fmt.Println("2 seconds elapsed...", time.Now().String())
 		}),
 		Name("Fireball!"),
 	)
 
-	counter := 2
+	Gron(
+		Every(3),
+		Seconds(),
+		Do(func() {
+			fmt.Println("3 seconds elapsed...", time.Now().String())
+		}),
+		Name("Blizzard!"),
+	)
+
+	start := time.Now()
 	// subscribe task events
 	for ev := range Subscribe() {
-		if ev.TaskName == "Fireball!" && ev.E == Running {
-			counter--
-		} else if ev.TaskName == "Fireball!" && ev.E == Finished && counter == 0 {
-			Disable(ev.TaskName)
+		if ev.E == Disabled {
+			fmt.Println("Disabled:", ev.TaskName)
 			Remove(ev.TaskName)
-		} else if ev.TaskName == "Fireball!" && ev.E == Disabled {
-			break
+
+		} else if time.Since(start) > 10*time.Second {
+			Disable(ev.TaskName)
 		}
 	}
 }
