@@ -38,6 +38,9 @@ func main() {
 
 		} else if time.Since(start) > 10*time.Second {
 			Disable(ev.TaskName)
+
+		} else {
+			fmt.Println(ev.TaskName, ev.E)
 		}
 	}
 }

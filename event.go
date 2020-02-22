@@ -34,6 +34,25 @@ const (
 	Empty
 )
 
+func (et EventType) String() string {
+	switch et {
+	case Enabled:
+		return "Enabled"
+	case Disabled:
+		return "Disabled"
+	case Running:
+		return "Running"
+	case Finished:
+		return "Finished"
+	case Failed:
+		return "Failed"
+	case Empty:
+		return "Empty"
+	default:
+	}
+	return "Undefined"
+}
+
 // Event presents the task event
 type Event struct {
 	TaskName
