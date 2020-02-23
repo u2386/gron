@@ -54,6 +54,7 @@ func Disable(name TaskName) {
 
 // Enable puts the task active
 func Enable(name TaskName) error {
+	// TODO: sync.Once?
 	if t, ok := c.tasks[name]; ok {
 		if t.c != nil {
 			close(t.c)

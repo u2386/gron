@@ -38,8 +38,7 @@ type Task struct {
 }
 
 func newTask() Task {
-	return Task{
-	}
+	return Task{}
 }
 
 func (t *Task) run() {
@@ -49,21 +48,29 @@ func (t *Task) run() {
 			t.status = inactive
 		}()
 
-		// TODO
-		// Timer?
-		ticker := time.NewTicker(time.Duration(t.interval) * time.Second)
-
 		for {
-			select {
-			case <-t.c:
-				t.c <- struct{}{}
-				return
-			case <-ticker.C:
-				stepRun(t)
-			default:
+			timer := willRun(*t)
+
+		LOOP:
+			for {
+				select {
+				case <-t.c:
+					t.c <- struct{}{}
+					timer.Stop()
+					return
+				case <-timer.C:
+					stepRun(t)
+					break LOOP
+				default:
+				}
 			}
 		}
 	}()
+}
+
+// TODO
+func willRun(t Task) *time.Timer {
+	return time.NewTimer(time.Duration(t.interval) * time.Second)
 }
 
 func stepRun(t *Task) {
