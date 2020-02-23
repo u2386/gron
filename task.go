@@ -39,7 +39,6 @@ type Task struct {
 
 func newTask() Task {
 	return Task{
-		c: make(chan struct{}),
 	}
 }
 

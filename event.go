@@ -19,9 +19,6 @@ const (
 
 	// Failed emitted when a task has failed
 	Failed
-
-	// Empty emitted when no task in crond
-	Empty
 )
 
 // bus is a global internal event stream
@@ -91,8 +88,6 @@ func (et etype) String() string {
 		return "Finished"
 	case Failed:
 		return "Failed"
-	case Empty:
-		return "Empty"
 	default:
 		return "Undefined"
 	}
@@ -116,10 +111,6 @@ func publishFinishedEvent(task Task) {
 
 func publishFailedEvent(task Task) {
 	publish(newBuilder().taskName(task.Name).event(Failed).message(task.errMsg).at(time.Now()).build())
-}
-
-func publishEmptyEvent() {
-	publish(newBuilder().event(Empty).at(time.Now()).build())
 }
 
 func publish(ev Event) {

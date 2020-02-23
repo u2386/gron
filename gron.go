@@ -37,19 +37,12 @@ func Gron(ops ...Option) error {
 }
 
 // Remove removes an inactive task from the scheduler
-func Remove(name TaskName) error {
+func Remove(name TaskName) {
 	if t, ok := c.tasks[name]; ok {
-		if t.status == active {
-			return fmt.Errorf("Active task %s can not be removed", name)
-		}
+		go disableTask(t)
 		// Always keep tasks modification in main routine
 		delete(c.tasks, name)
-
-		if len(c.tasks) == 0 {
-			go publishEmptyEvent()
-		}
 	}
-	return nil
 }
 
 // Disable puts the task inactive
@@ -60,10 +53,16 @@ func Disable(name TaskName) {
 }
 
 // Enable puts the task active
-func Enable(name TaskName) {
+func Enable(name TaskName) error {
 	if t, ok := c.tasks[name]; ok {
+		if t.c != nil {
+			close(t.c)
+			t.c = nil
+		}
+		t.c = make(chan struct{})
 		go enableTask(t)
 	}
+	return fmt.Errorf("Task<%s> not exists", name)
 }
 
 // Notice: Block-call

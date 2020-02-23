@@ -13,7 +13,7 @@ func TestRace(t *testing.T) {
 		Every(2),
 		Seconds(),
 		Do(func() {
-			fmt.Println("2 seconds elapsed...", time.Now().String())
+			fmt.Println("2 seconds elapsed...", time.Now().Format("15:04:05"))
 		}),
 		Name("Fireball!"),
 	)
@@ -22,7 +22,7 @@ func TestRace(t *testing.T) {
 		Every(3),
 		Seconds(),
 		Do(func() {
-			fmt.Println("3 seconds elapsed...", time.Now().String())
+			fmt.Println("3 seconds elapsed...", time.Now().Format("15:04:05"))
 		}),
 		Name("Blizzard!"),
 	)
@@ -37,26 +37,25 @@ func TestRace(t *testing.T) {
 	)
 
 	start := time.Now()
-
-LOOP:
+	counter := 3
 	// subscribe task events
 	for ev := range Subscribe() {
-		if time.Since(start) > 10*time.Second {
-			Disable(ev.TaskName)
+		switch ev.E {
+		case Disabled:
+			fmt.Println("Disabled:", ev.TaskName, ev.At.Format("15:04:05"))
+			counter--
+		case Failed:
+			fmt.Println("Failed:", ev.TaskName, ev.Msg, ev.At.Format("15:04:05"))
+			Remove(ev.TaskName)
+		default:
+			fmt.Println(ev.TaskName, ev.E, ev.At.Format("15:04:05"))
 		}
 
-		switch ev.E {
-		case Empty:
-			fmt.Println(ev.E)
-			break LOOP
-		case Disabled:
-			fmt.Println("Disabled:", ev.TaskName)
+		if counter == 0 {
+			break
+		}
+		if time.Since(start) > 10*time.Second {
 			Remove(ev.TaskName)
-		case Failed:
-			fmt.Println("Failed:", ev.TaskName, ev.Msg)
-			Disable(ev.TaskName)
-		default:
-			fmt.Println(ev.TaskName, ev.E)
 		}
 	}
 }
