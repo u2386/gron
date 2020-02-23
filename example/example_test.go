@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
+	"testing"
 	"time"
 
 	. "github.com/u2386/gron"
 )
 
-func main() {
+func TestRace(t *testing.T) {
 	Gron(
 		Every(2),
 		Seconds(),
@@ -37,9 +38,9 @@ func main() {
 
 	start := time.Now()
 
+LOOP:
 	// subscribe task events
 	for ev := range Subscribe() {
-LOOP:
 		if time.Since(start) > 10*time.Second {
 			Disable(ev.TaskName)
 		}

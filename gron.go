@@ -42,11 +42,12 @@ func Remove(name TaskName) error {
 		if t.status == active {
 			return fmt.Errorf("Active task %s can not be removed", name)
 		}
+		// Always keep tasks modification in main routine
 		delete(c.tasks, name)
-	}
 
-	if len(c.tasks) == 0 {
-		go publishEmptyEvent()
+		if len(c.tasks) == 0 {
+			go publishEmptyEvent()
+		}
 	}
 	return nil
 }
