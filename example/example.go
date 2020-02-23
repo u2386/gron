@@ -37,9 +37,9 @@ func main() {
 
 	start := time.Now()
 
+LOOP:
 	// subscribe task events
 	for ev := range Subscribe() {
-LOOP:
 		if time.Since(start) > 10*time.Second {
 			Disable(ev.TaskName)
 		}
