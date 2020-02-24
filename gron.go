@@ -66,17 +66,12 @@ func Enable(name TaskName) error {
 	return fmt.Errorf("Task<%s> not exists", name)
 }
 
-// Notice: Block-call
 func enableTask(task *Task) {
-	publishEnabledEvent(*task)
 	task.run()
 }
 
-// Notice: Block-call
 func disableTask(task *Task) {
-	publishDisabledEvent(*task)
 	task.c <- struct{}{}
-	<-task.c
 }
 
 func init() {

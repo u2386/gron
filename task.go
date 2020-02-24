@@ -42,30 +42,29 @@ func newTask() Task {
 }
 
 func (t *Task) run() {
+	defer func() {
+		t.status = inactive
+		publishDisabledEvent(*t)
+	}()
+
 	t.status = active
-	go func() {
-		defer func() {
-			t.status = inactive
-		}()
+	publishEnabledEvent(*t)
+	for {
+		timer := willRun(*t)
 
+	LOOP:
 		for {
-			timer := willRun(*t)
-
-		LOOP:
-			for {
-				select {
-				case <-t.c:
-					t.c <- struct{}{}
-					timer.Stop()
-					return
-				case <-timer.C:
-					stepRun(t)
-					break LOOP
-				default:
-				}
+			select {
+			case <-t.c:
+				timer.Stop()
+				return
+			case <-timer.C:
+				stepRun(t)
+				break LOOP
+			default:
 			}
 		}
-	}()
+	}
 }
 
 // TODO
