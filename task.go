@@ -49,20 +49,17 @@ func (t *Task) run() {
 
 	t.status = active
 	publishEnabledEvent(*t)
+
+LOOP:
 	for {
 		timer := willRun(*t)
 
-	LOOP:
-		for {
-			select {
-			case <-t.c:
-				timer.Stop()
-				return
-			case <-timer.C:
-				stepRun(t)
-				break LOOP
-			default:
-			}
+		select {
+		case <-t.c:
+			timer.Stop()
+			break LOOP
+		case <-timer.C:
+			stepRun(t)
 		}
 	}
 }
