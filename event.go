@@ -22,6 +22,7 @@ const (
 )
 
 // bus is a global internal event stream
+// TODO: Should be a singleton
 var bus chan Event
 
 type etype int

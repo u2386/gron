@@ -4,7 +4,8 @@ import (
 	"fmt"
 )
 
-// c is a global internal gron instance
+// c is a global internal Gron instance
+// TODO: Should be a singleton
 var c gron
 
 type gron struct {
