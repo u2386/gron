@@ -19,7 +19,10 @@ jobs:
         token: ${{ secrets.GitHub_PAT }}
 
     - name: Get dependencies
+      env:
+        TOKEN: ${{ secrets.GitHub_PAT }}
       run: |
+        git config --global url."https://u2386:${TOKEN}@github.com".insteadOf "https://github.com"
         go get -v -t -d ./...
         if [ -f Gopkg.toml ]; then
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
