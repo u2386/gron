@@ -118,5 +118,5 @@ func publish(ev Event) {
 }
 
 func init() {
-	bus = make(chan Event, 1)
+	bus = make(chan Event)
 }
