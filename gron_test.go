@@ -1,11 +1,9 @@
-package main
+package gron
 
 import (
 	"fmt"
 	"testing"
 	"time"
-
-	. "github.com/u2386/gron"
 )
 
 func TestRace(t *testing.T) {
@@ -58,4 +56,6 @@ func TestRace(t *testing.T) {
 			Remove(ev.TaskName)
 		}
 	}
+
+	fmt.Println("At the end!")
 }
