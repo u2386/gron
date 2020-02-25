@@ -11,27 +11,28 @@ func TestRace(t *testing.T) {
 		Every(2),
 		Seconds(),
 		Do(func() {
-			fmt.Println("2 seconds elapsed...", time.Now().Format("15:04:05"))
+			fmt.Println("FireBall!")
 		}),
-		Name("Fireball!"),
+		Name("Dragon"),
 	)
 
 	Gron(
 		Every(3),
 		Seconds(),
 		Do(func() {
-			fmt.Println("3 seconds elapsed...", time.Now().Format("15:04:05"))
+			time.Sleep(3 * time.Second)
+			fmt.Println("Cast Blizzard!")
 		}),
-		Name("Blizzard!"),
+		Name("Lydia"),
 	)
 
 	Gron(
 		Every(4),
 		Seconds(),
 		Do(func() {
-			panic("Oops...")
+			panic("Thunderclap! Oops...")
 		}),
-		Name("Thunderclap!"),
+		Name("Druid!"),
 	)
 
 	start := time.Now()
