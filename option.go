@@ -15,8 +15,53 @@ func Every(n uint64) Option {
 // Seconds sets the interval unit
 func Seconds() Option {
 	return func(task Task) (Task, error) {
+		task.unit = seconds
 		return task, nil
 	}
+}
+
+// Second is a singular Seconds
+func Second() Option {
+	return Seconds()
+}
+
+// Minutes sets the interval unit
+func Minutes() Option {
+	return func(task Task) (Task, error) {
+		task.unit = minutes
+		return task, nil
+	}
+}
+
+// Minute is a singular minutes
+func Minute() Option {
+	return Minutes()
+}
+
+// Hours sets the interval unit
+func Hours() Option {
+	return func(task Task) (Task, error) {
+		task.unit = hours
+		return task, nil
+	}
+}
+
+// Hour is a singular Hours
+func Hour() Option {
+	return Hours()
+}
+
+// Weeks sets the interval unit
+func Weeks() Option {
+	return func(task Task) (Task, error) {
+		task.unit = weeks
+		return task, nil
+	}
+}
+
+// Week is a singular Weeks
+func Week() Option {
+	return Weeks()
 }
 
 // Do assigns the periodic task
