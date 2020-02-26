@@ -1,5 +1,7 @@
 # gron: Yet another crontab-alike utility
 
+![Go](https://github.com/u2386/gron/workflows/Go/badge.svg?branch=master)
+
 Gron is an elegant and simple periodic Golang task scheduler, built for human beings.
 And, yes, it is `parallel`.
 
