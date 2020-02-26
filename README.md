@@ -1,4 +1,4 @@
-# gron: Yet another crontab-alike utility
+# gron: Yet another task scheduling utility
 
 ![Go](https://github.com/u2386/gron/workflows/Go/badge.svg?branch=master)
 
