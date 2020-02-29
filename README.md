@@ -1,8 +1,9 @@
 # gron: Yet another task scheduling utility
 
 ![build](https://github.com/u2386/gron/workflows/Go/badge.svg?branch=master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/u2386/gron)](https://goreportcard.com/report/github.com/u2386/gron)
 
-Gron is an elegant and simple periodic task scheduler, for humans.
+Gron is an elegant and simple periodic task scheduler, for human.
 
 Inspired by Python pacakge [schedule](https://github.com/dbader/schedule) and Go package [goCron](https://github.com/jasonlvhit/gocron)
 
