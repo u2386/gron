@@ -10,7 +10,7 @@ import (
 func TestEvery(t *testing.T) {
 	task := newTask()
 	task, _ = Every(4)(task)
-	assert.Equal(t, uint64(4), task.interval)
+	assert.Equal(t, uint(4), task.interval)
 }
 
 func TestSecond(t *testing.T) {
@@ -29,12 +29,6 @@ func TestHour(t *testing.T) {
 	task := newTask()
 	task, _ = Hour()(task)
 	assert.Equal(t, hours, task.unit)
-}
-
-func TestWeek(t *testing.T) {
-	task := newTask()
-	task, _ = Week()(task)
-	assert.Equal(t, weeks, task.unit)
 }
 
 func TestName(t *testing.T) {

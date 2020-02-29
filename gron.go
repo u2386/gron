@@ -29,11 +29,18 @@ func Gron(ops ...Option) error {
 		}
 	}
 
-	name := task.Name
+	if err := verifyTask(task); err != nil {
+		return err
+	}
+	c.tasks[task.Name] = &task
+	return nil
+}
+
+func verifyTask(t Task) error {
+	name := t.Name
 	if _, ok := c.tasks[name]; ok {
 		return fmt.Errorf("Duplicated task: %s", name)
 	}
-	c.tasks[name] = &task
 	return nil
 }
 

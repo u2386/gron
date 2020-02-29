@@ -19,19 +19,20 @@ import (
 
 func main() {
 	Gron(
-		Every(2),
+		Every(10),
 		Seconds(),
 		Do(func() {
-			fmt.Println("2 seconds elapsed...", time.Now().Format("15:04:05"))
+			fmt.Println("FireBall!", time.Now().Format("15:04:05"))
 		}),
 		Name("Fireball!"),
 	)
 
 	Gron(
-		Every(3),
-		Seconds(),
+		Every(1),
+		Minutes(),
+		At("::01"),
 		Do(func() {
-			fmt.Println("3 seconds elapsed...", time.Now().Format("15:04:05"))
+			fmt.Println("Cast Blizzard!", time.Now().Format("15:04:05"))
 		}),
 		Name("Blizzard!"),
 	)
@@ -40,34 +41,35 @@ func main() {
 		Every(4),
 		Seconds(),
 		Do(func() {
-			panic("Oops...")
+			panic("Oops...") // panic-proof
 		}),
 		Name("Thunderclap!"),
 	)
 
-	start := time.Now()
-	counter := 3
+	Gron(
+		Every(1),
+		Saturday(),
+		Do(func() {
+			time.Sleep(4)
+			fmt.Println("wubba lubba dub dub")
+		}),
+		Name("Rick"),
+	)
+
 	// subscribe task events
 	for ev := range Subscribe() {
 		switch ev.E {
 		case Disabled:
 			fmt.Println("Disabled:", ev.TaskName, ev.At.Format("15:04:05"))
-			counter--
 		case Failed:
 			fmt.Println("Failed:", ev.TaskName, ev.Msg, ev.At.Format("15:04:05"))
 			Remove(ev.TaskName)
 		default:
 			fmt.Println(ev.TaskName, ev.E, ev.At.Format("15:04:05"))
 		}
-
-		if counter == 0 {
-			break
-		}
-		if time.Since(start) > 10*time.Second {
-			Remove(ev.TaskName)
-		}
 	}
 }
+
 ```
 
 ## License
