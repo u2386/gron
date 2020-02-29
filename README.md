@@ -2,6 +2,7 @@
 
 ![build](https://github.com/u2386/gron/workflows/Go/badge.svg?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/u2386/gron)](https://goreportcard.com/report/github.com/u2386/gron)
+[![Coverage Status](https://coveralls.io/repos/github/u2386/gron/badge.svg?branch=master)](https://coveralls.io/github/u2386/gron?branch=master)
 
 Gron is an elegant and simple periodic task scheduler, for human.
 
