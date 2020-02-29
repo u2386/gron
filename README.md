@@ -3,7 +3,13 @@
 ![Go](https://github.com/u2386/gron/workflows/Go/badge.svg?branch=master)
 
 Gron is an elegant and simple periodic Golang task scheduler, built for human beings.
-And, yes, it is `parallel`.
+
+## Feature
+
+* Parallel scheduling
+* Isolated tasks
+* Panic-proof
+* EventBus
 
 ## Example
 
