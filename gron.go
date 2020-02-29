@@ -2,21 +2,27 @@ package gron
 
 import (
 	"fmt"
+	"sync"
 )
 
 // c is a global internal Gron instance
-// TODO: Should be a singleton
-var c gron
+var (
+	c        gron
+	gronOnce sync.Once
+)
 
 type gron struct {
 	tasks map[TaskName]*Task
 }
 
-// newGron is an internal call for testing purposes
+// newGron is an internal call for creating a singleton gron
 func newGron() gron {
-	return gron{
-		tasks: make(map[TaskName]*Task),
-	}
+	gronOnce.Do(func() {
+		c = gron{
+			tasks: make(map[TaskName]*Task),
+		}
+	})
+	return c
 }
 
 // Gron is an user interface for declaring periodic task

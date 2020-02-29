@@ -1,6 +1,7 @@
 package gron
 
 import (
+	"sync"
 	"time"
 )
 
@@ -22,8 +23,10 @@ const (
 )
 
 // bus is a global internal event stream
-// TODO: Should be a singleton
-var bus chan Event
+var (
+	bus     chan Event
+	busOnce sync.Once
+)
 
 type etype int
 
@@ -37,6 +40,13 @@ type Event struct {
 
 type builder struct {
 	ev Event
+}
+
+func newBus() chan Event {
+	busOnce.Do(func() {
+		bus = make(chan Event)
+	})
+	return bus
 }
 
 func newBuilder() *builder {
@@ -119,5 +129,5 @@ func publish(ev Event) {
 }
 
 func init() {
-	bus = make(chan Event)
+	bus = newBus()
 }
